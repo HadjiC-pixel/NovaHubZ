@@ -162,30 +162,18 @@
   }
 }
 
-/* Animated gradient background */
 .hero-bg {
-  background:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 255, 136, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(34, 211, 238, 0.05) 0%, transparent 50%),
-    #0a0a0a;
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 255, 136, 0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 60%, rgba(34, 211, 238, 0.05) 0%, transparent 50%), #0a0a0a;
 }
 
-/* Scanline effect */
 .scanlines::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.03) 2px,
-    rgba(0, 0, 0, 0.03) 4px
-  );
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
   pointer-events: none;
 }
 
-/* Terminal cursor */
 .cursor::after {
   content: '█';
   animation: blink 1s step-end infinite;
@@ -193,11 +181,14 @@
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
-/* Noise texture overlay */
 .noise::before {
   content: '';
   position: fixed;
@@ -208,10 +199,13 @@
   z-index: 0;
 }
 
-/* Shimmer animation */
 @keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
 }
 
 .shimmer {
@@ -220,7 +214,6 @@
   animation: shimmer 2s infinite;
 }
 
-/* Transition utilities */
 .transition-all-fast {
   transition: all 0.15s ease;
 }
