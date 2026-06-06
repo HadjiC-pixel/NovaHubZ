@@ -167,8 +167,8 @@ Rules:
         await ctx.send(embed=error_embed)
         print(f"Error: {e}")
 
-@bot.command(name="help")
-async def help_command(ctx):
+@bot.command(name="info")
+async def info_command(ctx):
     embed = discord.Embed(
         title="🤖 Lua Variable Renamer Bot",
         description="Automatically rename obfuscated Lua variables to meaningful names",
