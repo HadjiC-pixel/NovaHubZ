@@ -1,6 +1,0 @@
-{
-  "name": "AI Lua Renamer",
-  "description": "An AI-powered Lua script variable renamer and deobfuscation helper, featuring ready-made Discord bot integration codes.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
