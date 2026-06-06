@@ -27,7 +27,7 @@ GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 # ⭐ CRITICAL: Enable message content intent
 intents = discord.Intents.default()
-intents.message_content = True  # This is required!
+intents.message_content = True
 intents.guilds = True
 intents.guild_messages = True
 
@@ -37,12 +37,15 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 async def on_ready():
     print(f"✅ Bot is online as {bot.user}")
     print(f"✅ Logged in successfully!")
-    await bot.change_presence(
-        activity=discord.Activity(
-            type=discord.ActivityType.watching,
-            name="!rename"
+    try:
+        await bot.change_presence(
+            activity=discord.Activity(
+                type=discord.ActivityType.watching,
+                name="!rename | !info"
+            )
         )
-    )
+    except Exception as e:
+        print(f"Could not set status: {e}")
 
 @bot.command(name="rename")
 async def rename_lua(ctx):
@@ -92,18 +95,18 @@ async def rename_lua(ctx):
     processing_msg = await ctx.send(embed=embed)
     
     try:
-        # Prepare API request
+        # Prepare API request with new model
         headers = {
             "Authorization": f"Bearer {GROQ_API_KEY}",
             "Content-Type": "application/json"
         }
         
         payload = {
-            "model": "mixtral-8x7b-32768",
+            "model": "llama-3.1-70b-versatile",
             "messages": [
                 {
                     "role": "system",
-                    "content": """You are a Lua code refactoring expert. Your ONLY job is to rename obfuscated variables to meaningful names.
+                    "content": """You are a Lua code refactoring expert. Your ONLY job is to rename obfuscated variables to meaningful names. DO NOT include any obfuscation comments or markers in the output.
 
 CRITICAL RULES:
 1. ONLY rename variables - do NOT change any code logic
@@ -113,13 +116,17 @@ CRITICAL RULES:
 5. Use camelCase for variable names (mainWindow, autoGym, localPlayer)
 6. Do NOT add markdown formatting or code blocks
 7. Do NOT change any logic or add new code
+8. Do NOT include "-- obfuscated" or similar comments
+9. Do NOT add any notes about obfuscation
 
 Examples:
 - v32 (used as window) → mainWindow
 - v33 (used as tab) → mainTab
 - vu99 (local player) → localPlayer
 - vu100 (body velocity) → bodyVelocity
-- p35 (parameter, enabled) → isEnabled"""
+- p35 (parameter, enabled) → isEnabled
+
+Output ONLY the clean refactored code."""
                 },
                 {
                     "role": "user",
@@ -156,6 +163,20 @@ Examples:
             refactored_code = refactored_code[:-3]
         
         refactored_code = refactored_code.strip()
+        
+        # Remove any obfuscation-related comments
+        lines = refactored_code.split('\n')
+        filtered_lines = []
+        for line in lines:
+            # Skip lines that mention obfuscation
+            if '--' in line:
+                comment_part = line.split('--')[1].lower()
+                if 'obfuscat' not in comment_part and 'obf' not in comment_part:
+                    filtered_lines.append(line)
+            else:
+                filtered_lines.append(line)
+        
+        refactored_code = '\n'.join(filtered_lines).strip()
         
         # Save refactored code
         output_filename = "refactored_code.lua"
@@ -214,13 +235,13 @@ Examples:
 async def info_command(ctx):
     """Show bot information"""
     embed = discord.Embed(
-        title="🤖 Lua Variable Renamer Bot",
+        title="🤖 Nova Hub Z - Lua Renamer",
         description="Automatically rename obfuscated Lua variables to meaningful names using AI",
         color=discord.Color.blue()
     )
     embed.add_field(
         name="📝 Commands",
-        value="**!rename** [attach file] - Refactor your Lua code\n**!info** - Show this message",
+        value="**!rename** [attach file] - Refactor your Lua code\n**!info** - Show this message\n**!ping** - Check bot status",
         inline=False
     )
     embed.add_field(
@@ -234,11 +255,11 @@ async def info_command(ctx):
         inline=False
     )
     embed.add_field(
-        name="🔧 Max Variables",
-        value="Unlimited - works on files of any complexity",
+        name="🔧 Features",
+        value="✅ Clean output\n✅ No obfuscation markers\n✅ Preserves all logic\n✅ Unlimited variables",
         inline=False
     )
-    embed.set_footer(text="Powered by Groq AI | Made with ❤️")
+    embed.set_footer(text="Powered by Groq AI | Nova Hub Z")
     await ctx.send(embed=embed)
 
 @bot.command(name="ping")
@@ -247,7 +268,17 @@ async def ping_command(ctx):
     latency = round(bot.latency * 1000)
     embed = discord.Embed(
         title="🏓 Pong!",
-        description=f"Bot latency: **{latency}ms**",
+        description=f"Bot latency: **{latency}ms**\nStatus: **Online** ✅",
+        color=discord.Color.green()
+    )
+    await ctx.send(embed=embed)
+
+@bot.command(name="test")
+async def test_command(ctx):
+    """Test if bot is working"""
+    embed = discord.Embed(
+        title="✅ Bot is Working!",
+        description="Use `!rename` to refactor your Lua code\n\nYour bot **Nova Hub Z** is online and ready!",
         color=discord.Color.green()
     )
     await ctx.send(embed=embed)
