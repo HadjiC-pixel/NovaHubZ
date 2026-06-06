@@ -95,14 +95,14 @@ async def rename_lua(ctx):
     processing_msg = await ctx.send(embed=embed)
     
     try:
-        # Prepare API request with LATEST ACTIVE MODEL
+        # Prepare API request with new model
         headers = {
             "Authorization": f"Bearer {GROQ_API_KEY}",
             "Content-Type": "application/json"
         }
         
         payload = {
-            "model": "mixtral-8x7b-32768",  # ⭐ Latest active model as of June 2026
+            "model": "llama-3.1-70b-versatile",
             "messages": [
                 {
                     "role": "system",
@@ -142,19 +142,13 @@ Output ONLY the clean refactored code."""
         
         if response.status_code != 200:
             await processing_msg.delete()
-            try:
-                error_data = response.json()
-                error_msg = error_data.get("error", {}).get("message", "Unknown error")
-            except:
-                error_msg = f"HTTP {response.status_code}: {response.text}"
-            
+            error_msg = response.json().get("error", {}).get("message", "Unknown error")
             embed = discord.Embed(
                 title="❌ API Error",
                 description=f"Groq API Error:\n```{error_msg}```",
                 color=discord.Color.red()
             )
             await ctx.send(embed=embed)
-            print(f"Groq API Error: {error_msg}")
             return
         
         refactored_code = response.json()["choices"][0]["message"]["content"].strip()
