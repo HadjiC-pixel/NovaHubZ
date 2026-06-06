@@ -102,7 +102,7 @@ async def rename_lua(ctx):
         }
         
         payload = {
-            "model": "llama-4-scout-17b-16e",
+            "model": "meta-llama/llama-prompt-guard-2-22m",
             "messages": [
                 {
                     "role": "system",
