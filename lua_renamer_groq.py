@@ -102,7 +102,7 @@ async def rename_lua(ctx):
         }
         
         payload = {
-            "model": "llama-3.1-70b-versatile",
+            "model": "llama-4-scout-17b-16e",
             "messages": [
                 {
                     "role": "system",
