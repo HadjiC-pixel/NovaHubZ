@@ -1,0 +1,28 @@
+{
+  "name": "ai-lua-renamer-bot",
+  "version": "1.0.0",
+  "description": "Discord.js bot that semantically renames variables in Lua/Luau scripts using Google Gemini AI.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "lua",
+    "luau",
+    "gemini",
+    "renamer",
+    "obfuscator-reverter"
+  ],
+  "author": "AI Developer Studio",
+  "license": "MIT",
+  "dependencies": {
+    "@google/genai": "^2.4.0",
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
